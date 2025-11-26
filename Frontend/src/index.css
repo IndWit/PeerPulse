@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -13,6 +17,13 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+<<<<<<< Updated upstream
+=======
+/* @tailwind base;
+@tailwind components;
+@tailwind utilities; */
+
+>>>>>>> Stashed changes
 a {
   font-weight: 500;
   color: #646cff;
@@ -24,11 +35,20 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
+  /* Allow pages to span full width — do not center root content */
+  display: block;
   min-width: 320px;
   min-height: 100vh;
 }
+
+/* subtle defaults for interactive elements */
+input, button, textarea {
+  transition: box-shadow 160ms ease, transform 120ms ease, filter 120ms ease;
+}
+
+.rounded-2xl { border-radius: 1rem; }
+.rounded-3xl { border-radius: 1.5rem; }
+
 
 h1 {
   font-size: 3.2em;
@@ -57,7 +77,7 @@ button:focus-visible {
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
-    background-color: #ffffff;
+    background-color: #f6f9b4;
   }
   a:hover {
     color: #747bff;
