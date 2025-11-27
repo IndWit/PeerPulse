@@ -6,9 +6,44 @@ const LoginPage = ({ onNavigate }) => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleSignIn = (e) => {
+  const handleSignIn = async (e) => {
     e?.preventDefault();
-    if (email && password) onNavigate?.('dashboard');
+
+    if (!email || !password) {
+      alert("Please enter both email and password.");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:8080/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email,
+          password: password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log("Login success:", data);
+        
+        // --- CRITICAL LINE: THIS SAVES YOUR ID ---
+        localStorage.setItem("adminId", data.id); 
+        // ----------------------------------------
+
+        alert("Welcome back, " + (data.name || "User") + "!");
+        onNavigate?.('dashboard');
+      } else {
+        alert("Login failed: " + (data.status || "Invalid credentials"));
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      alert("Could not connect to the server. Is the Go backend running?");
+    }
   };
 
   return (

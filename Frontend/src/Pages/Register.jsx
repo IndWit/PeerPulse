@@ -7,10 +7,42 @@ const RegisterPage = ({ onNavigate }) => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleRegister = () => {
-    if (email && fullName && password) {
-      alert('Account created successfully!');
-      onNavigate('login');
+  const handleRegister = async (e) => {
+    e?.preventDefault(); // Stop reload
+
+    // 1. Basic Validation
+    if (!email || !fullName || !password) {
+      alert('Please fill in all fields');
+      return;
+    }
+
+    try {
+      // 2. Send data to Go Backend
+      // Note: We map 'fullName' to 'name' because that's what the Go struct expects
+      const response = await fetch("http://localhost:8080/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email,
+          name: fullName, 
+          password: password,
+        }),
+      });
+
+      // 3. Handle Response
+      const data = await response.json();
+
+      if (response.ok) {
+        alert('Account created successfully! Please login.');
+        onNavigate('login');
+      } else {
+        alert('Registration failed: ' + (data.status || "Unknown error"));
+      }
+    } catch (error) {
+      console.error("Register Error:", error);
+      alert("Could not connect to the server. Is the Go backend running?");
     }
   };
 
