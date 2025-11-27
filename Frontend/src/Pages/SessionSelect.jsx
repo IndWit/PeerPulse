@@ -86,7 +86,7 @@ const SessionSelect = ({ onNavigate, setCurrentSession }) => {
 
       <div className="flex-1 px-6 lg:px-20 py-12">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-2xl md:text-3xl font-bold mb-2">Published Sessions</h1>
+          <h1 className="text-2xl md:text-3xl text-gray-600 font-bold mb-2">Published Sessions</h1>
           <p className="text-gray-600 mb-6">Select a published session to view its dashboard.</p>
 
           {loading ? (
@@ -101,7 +101,7 @@ const SessionSelect = ({ onNavigate, setCurrentSession }) => {
               {sessions.map((s) => (
                 <div key={s.id} className="flex items-center justify-between bg-white p-4 rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition">
                   <div>
-                    <div className="font-semibold text-lg">{s.title}</div>
+                    <div className="font-semibold text-lg text-gray-600">{s.title}</div>
                     <div className="text-xs text-gray-500 mt-1 max-w-md truncate">
                       {s.content}
                     </div>

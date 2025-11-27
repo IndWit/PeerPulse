@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Eye, EyeOff, Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
+import { Eye, EyeOff, Facebook, Twitter, Instagram, Linkedin, UserPlus, Mail, Lock as LockIcon, User, Sparkles } from 'lucide-react';
 
 const RegisterPage = ({ onNavigate }) => {
   const [email, setEmail] = useState('');
@@ -47,112 +47,134 @@ const RegisterPage = ({ onNavigate }) => {
   };
 
   return (
-    <div className="min-h-screen bg-background-cream flex items-stretch p-0 m-0 overflow-hidden">
-      <div className="w-full h-full grid grid-cols-1 lg:grid-cols-2 gap-0">
+    <div className="min-h-screen gradient-mesh flex items-center justify-center p-4">
+      <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
         {/* Left Side - Illustration */}
-        <div className="bg-gradient-register p-6 lg:p-10 flex items-center justify-center relative overflow-hidden">
-          {/* Phone Illustration - Very Large */}
-          <div className="w-full h-full bg-gradient-to-b from-red to-red-dark rounded-3xl lg:rounded-[3rem] shadow-2xl relative flex flex-col items-center justify-between py-8 lg:py-12 transform transition-all duration-700 hover:scale-[1.01]">
-            {/* Profile Icon */}
-            <div className="w-32 h-32 lg:w-48 lg:h-48 bg-orange rounded-full flex items-center justify-center mt-4">
-              <div className="w-24 h-24 lg:w-36 lg:h-36 bg-orange-light rounded-full"></div>
-            </div>
-            <div className="text-center text-white/20 text-sm lg:text-base">
-              [User Icon]
-            </div>
-            
-            {/* Input Fields Representation */}
-            <div className="space-y-4 lg:space-y-6 w-4/5 mb-8">
-              <div className="w-full h-5 lg:h-7 bg-accent-yellow-light rounded-lg"></div>
-              <div className="flex gap-2 lg:gap-4 justify-center">
-                {[...Array(6)].map((_, i) => (
-                  <div key={i} className="w-8 h-8 lg:w-12 lg:h-12 bg-accent-yellow-light rounded-full"></div>
-                ))}
+        <div className="hidden lg:flex flex-col items-center justify-center space-y-8 animate-scale-in">
+          <div className="relative">
+            <div className="absolute inset-0 bg-gradient-to-br from-accent-yellow/30 to-orange/30 rounded-full blur-3xl"></div>
+            <div className="relative glass-strong rounded-3xl p-12 shadow-strong">
+              <div className="w-64 h-64 bg-gradient-to-br from-accent-yellow via-orange to-accent-yellow-dark rounded-3xl flex items-center justify-center relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                <UserPlus className="w-32 h-32 text-white relative z-10" strokeWidth={1.5} />
               </div>
             </div>
+          </div>
+          
+          <div className="text-center space-y-4 animate-slide-up animation-delay-200">
+            <h2 className="text-3xl font-black text-gray-900">
+              Join the <span className="bg-gradient-to-r from-accent-yellow to-orange bg-clip-text text-transparent">PeerPulse</span> community
+            </h2>
+            <p className="text-lg text-gray-600 max-w-md">
+              Start collecting honest feedback and help your team grow together
+            </p>
           </div>
         </div>
 
         {/* Right Side - Form */}
-        <div className="bg-white p-6 lg:p-12 xl:p-20 flex flex-col justify-center overflow-y-auto">
-          <div className="w-full px-4 lg:px-12">
-          <h1 className="text-3xl lg:text-4xl xl:text-5xl font-extrabold mb-6 lg:mb-10 text-left text-gray-900">Create an account</h1>
+        <div className="glass-strong rounded-3xl p-8 lg:p-12 shadow-strong animate-slide-up">
+          <div className="mb-8">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent-yellow/20 border border-accent-yellow/30 mb-4">
+              <Sparkles className="w-4 h-4 text-accent-yellow-dark" />
+              <span className="text-sm font-semibold text-gray-700">Free forever</span>
+            </div>
+            <h1 className="text-4xl font-black mb-2 text-gray-900">Create account</h1>
+            <p className="text-gray-600">Get started with PeerPulse in minutes</p>
+          </div>
           
-          <div className="space-y-5 lg:space-y-6">
+          <form onSubmit={handleRegister} className="space-y-5">
             <div>
-              <label className="block text-sm lg:text-base text-gray-500 mb-2">Email Address</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                <Mail className="w-4 h-4 inline mr-2" />
+                Email Address
+              </label>
               <input
                 type="email"
-                placeholder="Enter your email address"
+                placeholder="you@company.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-5 py-3.5 lg:py-4 text-base lg:text-lg bg-gray-50 text-gray-800 placeholder-gray-400 rounded-xl focus:outline-none focus:ring-2 focus:ring-accent-yellow border border-gray-200 shadow-sm"
+                className="input"
+                required
               />
             </div>
             
             <div>
-              <label className="block text-sm lg:text-base text-gray-500 mb-2">Full Name</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                <User className="w-4 h-4 inline mr-2" />
+                Full Name
+              </label>
               <input
                 type="text"
-                placeholder="Enter your full name"
+                placeholder="John Smith"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                className="w-full px-5 py-3.5 lg:py-4 text-base lg:text-lg bg-gray-50 text-gray-800 placeholder-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-yellow border border-gray-200"
+                className="input"
+                required
               />
             </div>
             
             <div>
-              <label className="block text-sm lg:text-base text-gray-500 mb-2">Password</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                <LockIcon className="w-4 h-4 inline mr-2" />
+                Password
+              </label>
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
-                  placeholder="Create your password"
+                  placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-5 py-3.5 lg:py-4 text-base lg:text-lg bg-gray-50 text-gray-800 placeholder-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-yellow border border-gray-200"
+                  className="input pr-12"
+                  required
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-600"
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-colors"
                 >
-                  {showPassword ? <EyeOff className="w-5 h-5 lg:w-6 lg:h-6" /> : <Eye className="w-5 h-5 lg:w-6 lg:h-6" />}
+                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
               </div>
+              <p className="text-xs text-gray-500 mt-2">Must be at least 8 characters</p>
             </div>
             
             <button
-              onClick={handleRegister}
-              className="w-full bg-gradient-to-r from-accent-yellow to-accent-yellow-dark hover:from-accent-yellow-dark hover:to-accent-yellow text-gray-900 font-semibold text-lg lg:text-xl py-4 lg:py-5 rounded-2xl shadow-lg transition-transform transform hover:-translate-y-0.5 mt-6"
+              type="submit"
+              className="btn-primary w-full text-lg group"
             >
-              Create an account
+              <span>Create account</span>
+              <UserPlus className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>
+          </form>
+          
+          <div className="mt-8 text-center">
+            <p className="text-gray-600">
+              Already have an account?{' '}
+              <button 
+                onClick={() => onNavigate('login')}
+                className="text-accent-yellow-dark font-bold hover:underline transition-all"
+              >
+                Sign in
+              </button>
+            </p>
           </div>
           
-          <p className="text-center mt-6 lg:mt-8 text-base lg:text-lg text-gray-600">
-            Already have an account?{' '}
-            <button 
-              onClick={() => onNavigate('login')}
-              className="text-accent-yellow font-semibold hover:underline"
-            >
-              Login
-            </button>
-          </p>
-          
-          <div className="flex justify-center gap-4 lg:gap-5 mt-6 lg:mt-8">
-            <button className="w-11 h-11 lg:w-12 lg:h-12 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition">
-              <Facebook className="w-5 h-5 lg:w-6 lg:h-6 text-gray-600" />
-            </button>
-            <button className="w-13 h-10 lg:w-12 lg:h-12 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition">
-              <Twitter className="w-5 h-5 lg:w-6 lg:h-6 text-gray-600" />
-            </button>
-            <button className="w-11 h-11 lg:w-12 lg:h-12 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition">
-              <Instagram className="w-5 h-5 lg:w-6 lg:h-6 text-gray-600" />
-            </button>
-            <button className="w-11 h-11 lg:w-12 lg:h-12 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition">
-              <Linkedin className="w-5 h-5 lg:w-6 lg:h-6 text-gray-600" />
-            </button>
-          </div>
+          <div className="mt-8 pt-8 border-t border-gray-200">
+            <p className="text-center text-sm text-gray-500 mb-4">Or continue with</p>
+            <div className="flex justify-center gap-3">
+              <button className="w-12 h-12 glass rounded-full flex items-center justify-center hover:scale-110 transition-transform">
+                <Facebook className="w-5 h-5 text-gray-700" />
+              </button>
+              <button className="w-12 h-12 glass rounded-full flex items-center justify-center hover:scale-110 transition-transform">
+                <Twitter className="w-5 h-5 text-gray-700" />
+              </button>
+              <button className="w-12 h-12 glass rounded-full flex items-center justify-center hover:scale-110 transition-transform">
+                <Instagram className="w-5 h-5 text-gray-700" />
+              </button>
+              <button className="w-12 h-12 glass rounded-full flex items-center justify-center hover:scale-110 transition-transform">
+                <Linkedin className="w-5 h-5 text-gray-700" />
+              </button>
+            </div>
           </div>
         </div>
       </div>

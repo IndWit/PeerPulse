@@ -1,11 +1,23 @@
 import React, { useState, useEffect } from 'react';
+import { RefreshCw, Plus, LogOut, TrendingUp, MessageSquare, ThumbsUp, ThumbsDown, BarChart3, Sparkles } from 'lucide-react';
 // import Navbar from '../components/Navbar'; 
 
 // Placeholder Navbar
 const Navbar = ({ onNavigate }) => (
-  <nav className="w-full bg-white shadow-sm px-8 py-4 flex justify-between items-center">
-    <div className="font-bold text-xl text-gray-800">PeerPulse</div>
-    <button onClick={() => onNavigate && onNavigate('login')} className="text-gray-600 hover:text-gray-900">Logout</button>
+  <nav className="sticky top-0 z-50 glass-strong px-8 py-4">
+    <div className="container-custom flex justify-between items-center">
+      <div className="flex items-center gap-3">
+        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-accent-yellow to-accent-yellow-dark flex items-center justify-center">
+          <span className="text-white font-black text-lg">P</span>
+        </div>
+        <span className="font-black text-xl text-gray-900">PeerPulse</span>
+        <span className="text-xs px-2 py-1 rounded-full bg-accent-yellow/20 text-accent-yellow-dark font-bold">Admin</span>
+      </div>
+      <button onClick={() => onNavigate && onNavigate('login')} className="btn-secondary flex items-center gap-2">
+        <LogOut className="w-4 h-4" />
+        <span>Logout</span>
+      </button>
+    </div>
   </nav>
 );
 
@@ -97,57 +109,90 @@ const AdminDashboard = ({ onNavigate, sessionId }) => {
   };
 
   return (
-    <div className="min-h-screen bg-background-cream flex flex-col">
+    <div className="min-h-screen gradient-mesh flex flex-col">
       <Navbar onNavigate={onNavigate} />
       
-      <div className="flex-1 px-4 sm:px-8 lg:px-16 xl:px-24 py-8">
-        <div className="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div>
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-2">Dashboard</h1>
-            <p className="text-gray-600 text-sm md:text-base">Real-time overview of incoming feedback</p>
-            {currentId ? (
-              <div className="text-sm text-gray-700 mt-2 bg-white inline-block px-3 py-1 rounded-lg border border-gray-200 shadow-sm">
-                Viewing Session ID: <span className="font-mono font-bold text-accent-yellow-dark">{currentId}</span>
+      <div className="flex-1 section">
+        <div className="container-custom">
+          <div className="mb-8 animate-slide-up">
+            <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
+              <div>
+                <h1 className="text-4xl md:text-5xl font-black mb-3 text-gray-900">Dashboard</h1>
+                <p className="text-lg text-gray-600 mb-4">Real-time overview of incoming feedback</p>
+                {currentId ? (
+                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-accent-yellow/30">
+                    <Sparkles className="w-4 h-4 text-accent-yellow" />
+                    <span className="text-sm font-semibold text-gray-700">Session:</span>
+                    <span className="font-mono font-bold text-accent-yellow-dark">{currentId}</span>
+                  </div>
+                ) : (
+                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-100 border border-red-300">
+                    <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+                    <span className="text-sm font-bold text-red-700">No session selected</span>
+                  </div>
+                )}
               </div>
-            ) : (
-              <div className="text-sm text-red-500 mt-2 font-semibold flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-red-500"></span> No session selected
+              <div className="flex flex-wrap items-center gap-3">
+                <button onClick={fetchData} className="btn-secondary flex items-center gap-2 group">
+                  <RefreshCw className="w-4 h-4 group-hover:rotate-180 transition-transform duration-500" />
+                  <span>Refresh</span>
+                </button>
+                <button onClick={() => onNavigate && onNavigate('selectSession')} className="btn-secondary flex items-center gap-2">
+                  <BarChart3 className="w-4 h-4" />
+                  <span>Switch Session</span>
+                </button>
+                <button onClick={() => onNavigate && onNavigate('createSession')} className="btn-primary flex items-center gap-2">
+                  <Plus className="w-4 h-4" />
+                  <span>Create New</span>
+                </button>
               </div>
-            )}
+            </div>
           </div>
-          <div className="flex items-center gap-3">
-             <button onClick={fetchData} className="px-3 py-2 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 text-sm font-medium">🔄 Refresh</button>
-            <button onClick={() => onNavigate && onNavigate('selectSession')} className="px-4 py-2 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 transition shadow-sm text-sm font-medium">Switch Session</button>
-            <button onClick={() => onNavigate && onNavigate('createSession')} className="px-4 py-2 rounded-lg bg-accent-yellow hover:bg-accent-yellow-dark font-semibold shadow-sm transition text-sm">Create New</button>
-          </div>
-        </div>
 
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-8 md:mb-12">
-          <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
-            <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">Total Responses</h3>
-            <p className="text-4xl font-bold mb-1 text-gray-900">{stats.total}</p>
-            <p className="text-xs text-gray-400">All time</p>
+          {/* Stats Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            <div className="card group animate-fade-in">
+              <div className="flex items-start justify-between mb-4">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <MessageSquare className="w-6 h-6 text-blue-600" />
+                </div>
+                <div className="px-3 py-1 rounded-full bg-blue-50 text-blue-600 text-xs font-bold">ALL TIME</div>
+              </div>
+              <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wide mb-2">Total Responses</h3>
+              <p className="text-4xl font-black text-gray-900">{stats.total}</p>
+            </div>
+            
+            <div className="card group animate-fade-in animation-delay-100">
+              <div className="flex items-start justify-between mb-4">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-green-100 to-green-200 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <ThumbsUp className="w-6 h-6 text-green-600" />
+                </div>
+                <div className="px-3 py-1 rounded-full bg-green-50 text-green-600 text-xs font-bold">POSITIVE</div>
+              </div>
+              <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wide mb-2">Positive Sentiment</h3>
+              <p className="text-4xl font-black text-green-600">{stats.positive}</p>
+            </div>
+            
+            <div className="card group animate-fade-in animation-delay-200">
+              <div className="flex items-start justify-between mb-4">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-red-100 to-red-200 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <ThumbsDown className="w-6 h-6 text-red-600" />
+                </div>
+                <div className="px-3 py-1 rounded-full bg-red-50 text-red-600 text-xs font-bold">NEEDS WORK</div>
+              </div>
+              <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wide mb-2">Areas to Improve</h3>
+              <p className="text-4xl font-black text-red-500">{stats.negative}</p>
+            </div>
           </div>
-          
-          <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
-            <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">Positive Sentiment</h3>
-            <p className="text-4xl font-bold mb-1 text-green-600">{stats.positive}</p>
-            <p className="text-xs text-gray-400">Rated Good or Excellent</p>
-          </div>
-          
-          <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
-            <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">Negative Sentiment</h3>
-            <p className="text-4xl font-bold mb-1 text-red-500">{stats.negative}</p>
-            <p className="text-xs text-gray-400">Rated Poor or Bad</p>
-          </div>
-        </div>
 
-        {/* Recent Feedback Table */}
-        <div className="bg-white rounded-2xl border border-gray-200 mb-12 shadow-sm overflow-hidden">
-          <div className="p-6 border-b border-gray-100">
-            <h2 className="text-xl font-bold text-gray-800">Recent Feedback</h2>
-          </div>
+          {/* Recent Feedback Table */}
+          <div className="card mb-12 overflow-hidden animate-fade-in animation-delay-300">
+            <div className="p-6 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white">
+              <div className="flex items-center gap-3">
+                <TrendingUp className="w-6 h-6 text-accent-yellow-dark" />
+                <h2 className="text-2xl font-black text-gray-900">Recent Feedback</h2>
+              </div>
+            </div>
           
           {loading ? (
              <div className="p-10 text-center text-gray-500">Loading data...</div>
@@ -188,14 +233,18 @@ const AdminDashboard = ({ onNavigate, sessionId }) => {
           )}
         </div>
 
-        {/* Placeholder for Quiz Section (Static for now) */}
-        <div className="bg-white rounded-2xl border border-gray-200 p-6 opacity-60 pointer-events-none grayscale">
-          <div className="flex justify-between items-center mb-6">
-             <h2 className="text-xl font-bold text-gray-800">Quiz Analytics</h2>
-             <span className="bg-gray-200 text-gray-600 text-xs px-2 py-1 rounded">Coming Soon</span>
-          </div>
-          <div className="flex items-end gap-4 h-32 justify-center">
-             <div className="text-gray-400">Quiz features will appear here in version 2.0</div>
+          {/* Placeholder for Quiz Section (Static for now) */}
+          <div className="card opacity-60 pointer-events-none grayscale animate-fade-in animation-delay-400">
+            <div className="flex justify-between items-center mb-6">
+              <div className="flex items-center gap-3">
+                <BarChart3 className="w-6 h-6 text-gray-400" />
+                <h2 className="text-2xl font-black text-gray-800">Quiz Analytics</h2>
+              </div>
+              <span className="px-3 py-1 rounded-full bg-gray-200 text-gray-600 text-sm font-bold">Coming Soon</span>
+            </div>
+            <div className="flex items-center justify-center h-32">
+              <p className="text-gray-400 italic">Quiz features will appear here in version 2.0</p>
+            </div>
           </div>
         </div>
       </div>
