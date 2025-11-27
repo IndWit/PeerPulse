@@ -6,13 +6,16 @@ import { RefreshCw, Plus, LogOut, TrendingUp, MessageSquare, ThumbsUp, ThumbsDow
 const Navbar = ({ onNavigate }) => (
   <nav className="sticky top-0 z-50 glass-strong px-8 py-4">
     <div className="container-custom flex justify-between items-center">
-      <div className="flex items-center gap-3">
+      <button 
+        onClick={() => onNavigate && onNavigate('landing')}
+        className="flex items-center gap-3 hover:scale-105 transition-transform cursor-pointer"
+      >
         <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-accent-yellow to-accent-yellow-dark flex items-center justify-center">
           <span className="text-white font-black text-lg">P</span>
         </div>
         <span className="font-black text-xl text-gray-900">PeerPulse</span>
         <span className="text-xs px-2 py-1 rounded-full bg-accent-yellow/20 text-accent-yellow-dark font-bold">Admin</span>
-      </div>
+      </button>
       <button onClick={() => onNavigate && onNavigate('login')} className="btn-secondary flex items-center gap-2">
         <LogOut className="w-4 h-4" />
         <span>Logout</span>
