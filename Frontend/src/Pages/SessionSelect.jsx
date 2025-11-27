@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-// import Navbar from '../components/Navbar'; // Uncomment this in your local project
+// import Navbar from '../components/Navbar'; 
+import { Trash2 } from 'lucide-react'; // Import Trash Icon
 
-// Placeholder Navbar to ensure code compiles without the external file
+// Placeholder Navbar
 const Navbar = ({ onNavigate }) => (
   <nav className="w-full bg-white shadow-sm px-8 py-4 flex justify-between items-center">
     <div className="font-bold text-xl text-gray-800">PeerPulse</div>
@@ -18,28 +19,27 @@ const SessionSelect = ({ onNavigate, setCurrentSession }) => {
   const [sessions, setSessions] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // --- Fetch Real Data on Load ---
+  const fetchMySessions = async () => {
+    const adminId = localStorage.getItem("adminId");
+    
+    if (!adminId) {
+      alert("Please login first!");
+      if (onNavigate) onNavigate('login');
+      return;
+    }
+
+    try {
+      const response = await fetch(`http://localhost:8080/get-sessions?creator_id=${adminId}`);
+      const data = await response.json();
+      setSessions(Array.isArray(data) ? data : []);
+    } catch (error) {
+      console.error("Error loading sessions:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchMySessions = async () => {
-      const adminId = localStorage.getItem("adminId");
-      
-      if (!adminId) {
-        alert("Please login first!");
-        if (onNavigate) onNavigate('login');
-        return;
-      }
-
-      try {
-        const response = await fetch(`http://localhost:8080/get-sessions?creator_id=${adminId}`);
-        const data = await response.json();
-        setSessions(data);
-      } catch (error) {
-        console.error("Error loading sessions:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchMySessions();
   }, [onNavigate]); 
 
@@ -49,16 +49,35 @@ const SessionSelect = ({ onNavigate, setCurrentSession }) => {
     if (onNavigate) onNavigate('dashboard');
   };
 
-  // --- NEW: Copy Link Function ---
   const copyShareLink = (id) => {
-    // Creates: http://localhost:5173/submit-feedback?session_id=123...
     const link = `${window.location.origin}/submit-feedback?session_id=${id}`;
-    
     navigator.clipboard.writeText(link).then(() => {
       alert("Link copied to clipboard!\n\n" + link);
-    }).catch(err => {
-      console.error('Failed to copy: ', err);
     });
+  };
+
+  // --- NEW: DELETE FUNCTION ---
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this session? This cannot be undone.")) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`http://localhost:8080/delete-session?id=${id}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        // Success! Remove from list immediately
+        setSessions(sessions.filter(s => s.id !== id));
+        alert("Session deleted.");
+      } else {
+        alert("Failed to delete session.");
+      }
+    } catch (error) {
+      console.error("Delete error:", error);
+      alert("Could not connect to server.");
+    }
   };
 
   return (
@@ -92,16 +111,24 @@ const SessionSelect = ({ onNavigate, setCurrentSession }) => {
                       onClick={() => openSession(s)} 
                       className="px-5 py-2 rounded-full bg-accent-yellow hover:bg-accent-yellow-dark font-semibold text-gray-800 transition"
                     >
-                      Open Dashboard
+                      Open
                     </button>
                     
-                    {/* UPDATED BUTTON: Copies the Share Link */}
                     <button 
                       onClick={() => copyShareLink(s.id)} 
-                      className="px-4 py-2 rounded-lg border border-gray-200 text-sm text-gray-600 hover:bg-gray-50 transition font-medium flex items-center gap-2"
-                      title="Copy Shareable Link"
+                      className="px-4 py-2 rounded-lg border border-gray-200 text-sm text-gray-600 hover:bg-gray-50 transition font-medium"
+                      title="Copy Share Link"
                     >
-                      🔗 Copy Link
+                      Link
+                    </button>
+
+                    {/* DELETE BUTTON */}
+                    <button 
+                      onClick={() => handleDelete(s.id)} 
+                      className="p-2 rounded-lg text-red-500 hover:bg-red-50 border border-transparent hover:border-red-100 transition"
+                      title="Delete Session"
+                    >
+                      <Trash2 className="w-5 h-5" />
                     </button>
                   </div>
                 </div>
